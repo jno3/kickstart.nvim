@@ -361,6 +361,20 @@ do
     },
   }
 
+
+  -- neo-tree
+  vim.pack.add({
+  {
+    src = 'https://github.com/nvim-neo-tree/neo-tree.nvim',
+    version = vim.version.range('3')
+  },
+    -- dependencies
+    "https://github.com/nvim-lua/plenary.nvim",
+    "https://github.com/MunifTanjim/nui.nvim",
+    -- optional, but recommended
+    "https://github.com/nvim-tree/nvim-web-devicons",
+  })
+
   -- Useful plugin to show you pending keybinds.
   vim.pack.add { gh 'folke/which-key.nvim' }
   require('which-key').setup {
@@ -483,6 +497,9 @@ do
     gh 'nvim-lua/plenary.nvim',
     gh 'nvim-telescope/telescope.nvim',
     gh 'nvim-telescope/telescope-ui-select.nvim',
+    gh 'nvim-tree/nvim-web-devicons',
+    gh 'sharkdp/fd.git',
+    gh 'BurntSushi/ripgrep.git'
   }
   if vim.fn.executable 'make' == 1 then table.insert(telescope_plugins, gh 'nvim-telescope/telescope-fzf-native.nvim') end
 
@@ -508,6 +525,10 @@ do
   -- Enable Telescope extensions if they are installed
   pcall(require('telescope').load_extension, 'fzf')
   pcall(require('telescope').load_extension, 'ui-select')
+  pcall(require('telescope').load_extension, 'ripgrep')
+  pcall(require('telescope').load_extension, 'fd')
+  pcall(require('telescope').load_extension, 'devicons')
+
 
   -- See `:help telescope.builtin`
   local builtin = require 'telescope.builtin'
