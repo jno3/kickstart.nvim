@@ -772,6 +772,16 @@ do
   -- Translates between nvim-lspconfig server names and mason.nvim package names (e.g. lua_ls <-> lua-language-server)
   require('mason-lspconfig').setup {
     automatic_enable = false, -- Change this to true if you want to automatically enable servers that are installed manually (e.g. via :Mason / :MasonInstall)
+    ensure_installed = { "jdtls" },
+    handlers = {
+      function(server_name)
+        require('lspconfig')[server_name].setup {}
+      end,
+
+      ['jdtls'] = function()
+        -- Do nothing, as jdtls is handled by nvim-jdtls
+      end,
+    }
   }
 
   -- Ensure the servers and tools above are installed
