@@ -33,8 +33,21 @@ vim.api.nvim_create_autocmd('FileType', {
     local jdtls_jar = env.JDTLS_JAR or os.getenv('JDTLS_JAR')
     local jdtls_config = env.JDTLS_CONFIG or os.getenv('JDTLS_CONFIG')
     local debug_plugin = env.DEBUG_PLUGIN or os.getenv('DEBUG_PLUGIN')
+    local tests_jars = env.TESTS_JARS or os.getenv('TESTS_JARS')
+
 
     local bundles = vim.fn.glob(debug_plugin, true, true)
+    local java_test_bundles = vim.split(vim.fn.glob(tests_jars, 1), "\n")
+    local excluded = {
+      "com.microsoft.java.test.runner-jar-with-dependencies.jar",
+      "jacocoagent.jar",
+    }
+    for _, java_test_jar in ipairs(java_test_bundles) do
+      local fname = vim.fn.fnamemodify(java_test_jar, ":t")
+      if not vim.tbl_contains(excluded, fname) then
+        table.insert(bundles, java_test_jar)
+      end
+    end
 
     local config = {
       cmd = {
