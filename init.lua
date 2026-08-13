@@ -708,6 +708,23 @@ do
     end,
   })
 
+  local function load_env(path)
+    local vars = {}
+    local file = io.open(path, 'r')
+    if not file then return vars end
+
+    for line in file:lines() do
+      local k, v = line:match('^%s*([%w_]+)%s*=%s*(.-)%s*$')
+      if k and v then vars[k] = v end
+    end
+
+    file:close()
+    return vars
+  end
+
+  local env_path = vim.fn.fnamemodify(debug.getinfo(1, 'S').source:sub(2), ':p:h') .. '/.env'
+  local env = load_env(env_path)
+
   -- Enable the following language servers
   --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
   --  See `:help lsp-config` for information about keys and how to configure
@@ -723,6 +740,17 @@ do
     --
     -- But for many setups, the LSP (`ts_ls`) will work just fine
     -- ts_ls = {},
+    angularls = {
+      cmd = {
+        "ngserver",
+        "--stdio",
+        "--tsProbeLocations",
+        env.TS_PROBE,
+        "--ngProbeLocations",
+        env.ANGULAR_LS
+      }
+    },
+
 
     stylua = {}, -- Used to format Lua code
 
